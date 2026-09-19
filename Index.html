@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#00334a">
+  <title>Velorah® — Where dreams rise</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-display: "Instrument Serif", serif;
+      --font-body: "Inter", sans-serif;
+
+      --background: 201 100% 13%;
+      --foreground: 0 0% 100%;
+      --muted-foreground: 240 4% 66%;
+      --primary: 0 0% 100%;
+      --primary-foreground: 0 0% 4%;
+      --secondary: 0 0% 10%;
+      --muted: 0 0% 10%;
+      --accent: 0 0% 10%;
+      --border: 0 0% 18%;
+      --input: 0 0% 18%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: hsl(var(--background));
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: var(--font-body);
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .video-background {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      color: hsl(var(--foreground));
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.025em;
+      white-space: nowrap;
+    }
+
+    .logo sup {
+      font-family: var(--font-body);
+      font-size: 11px;
+      vertical-align: super;
+      margin-left: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      color: hsl(var(--muted-foreground));
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .25s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: hsl(var(--foreground));
+    }
+
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.01);
+      background-blend-mode: luminosity;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: none;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .liquid-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(
+        180deg,
+        rgba(255,255,255,.45) 0%,
+        rgba(255,255,255,.15) 20%,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,0) 60%,
+        rgba(255,255,255,.15) 80%,
+        rgba(255,255,255,.45) 100%
+      );
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .nav-button,
+    .hero-button {
+      color: hsl(var(--foreground));
+      cursor: pointer;
+      transition: transform .3s ease;
+    }
+
+    .nav-button:hover,
+    .hero-button:hover {
+      transform: scale(1.03);
+    }
+
+    .nav-button {
+      border-radius: 999px;
+      padding: 10px 24px;
+      font-family: var(--font-body);
+      font-size: 14px;
+    }
+
+    .hero {
+      min-height: calc(100vh - 88px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 90px 24px 160px;
+    }
+
+    .hero h1 {
+      max-width: 1280px;
+      margin: 0;
+      color: hsl(var(--foreground));
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 8rem);
+      font-weight: 400;
+      line-height: .95;
+      letter-spacing: -2.46px;
+    }
+
+    .hero h1 em {
+      color: hsl(var(--muted-foreground));
+      font-style: normal;
+    }
+
+    .hero p {
+      max-width: 672px;
+      margin: 32px 0 0;
+      color: hsl(var(--muted-foreground));
+      font-size: clamp(1rem, 1.6vw, 1.125rem);
+      line-height: 1.7;
+    }
+
+    .hero-button {
+      margin-top: 48px;
+      padding: 20px 56px;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: 16px;
+    }
+
+    @keyframes fade-rise {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-rise {
+      animation: fade-rise .8s ease-out both;
+    }
+
+    .animate-fade-rise-delay {
+      animation: fade-rise .8s ease-out .2s both;
+    }
+
+    .animate-fade-rise-delay-2 {
+      animation: fade-rise .8s ease-out .4s both;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 22px 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .logo {
+        font-size: 28px;
+      }
+
+      .hero {
+        min-height: calc(100vh - 78px);
+        padding: 70px 20px 100px;
+      }
+
+      .hero h1 {
+        font-size: clamp(3.2rem, 15vw, 6rem);
+        letter-spacing: -1.5px;
+      }
+
+      .hero p {
+        margin-top: 24px;
+      }
+
+      .hero-button {
+        margin-top: 36px;
+        padding: 18px 44px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-rise,
+      .animate-fade-rise-delay,
+      .animate-fade-rise-delay-2 {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page" id="home">
+
+    <video
+      class="video-background"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    >
+      <source
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+        type="video/mp4"
+      >
+      Your browser does not support HTML5 video.
+    </video>
+
+    <div class="content">
+
+      <nav class="navbar">
+        <a href="#home" class="logo">
+          Velorah<sup>®</sup>
+        </a>
+
+        <div class="nav-links">
+          <a href="#home" class="active">Home</a>
+          <a href="#studio">Studio</a>
+          <a href="#about">About</a>
+          <a href="#journal">Journal</a>
+          <a href="#reach-us">Reach Us</a>
+        </div>
+
+        <button
+          class="liquid-glass nav-button"
+          type="button"
+          onclick="beginJourney()"
+        >
+          Begin Journey
+        </button>
+      </nav>
+
+      <section class="hero" id="studio">
+
+        <h1 class="animate-fade-rise">
+          Where
+          <em>dreams</em>
+          rise through the
+          <em>silence.</em>
+        </h1>
+
+        <p class="animate-fade-rise-delay">
+          We're designing tools for deep thinkers, bold creators, and quiet
+          rebels. Amid the chaos, we build digital spaces for sharp focus
+          and inspired work.
+        </p>
+
+        <button
+          class="liquid-glass hero-button animate-fade-rise-delay-2"
+          type="button"
+          onclick="beginJourney()"
+        >
+          Begin Journey
+        </button>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    function beginJourney() {
+      document.getElementById("studio").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+
+    // Some browsers block autoplay until the page is interacted with.
+    // Try to resume the video after the first interaction.
+    document.addEventListener("pointerdown", function () {
+      const video = document.querySelector(".video-background");
+      if (video && video.paused) {
+        video.play().catch(() => {});
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
